@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CustomInput;
 
 public class ControlsManager : MonoBehaviour {
     public enum ControlEntity { Ship, Player };
@@ -51,7 +52,7 @@ public class ControlsManager : MonoBehaviour {
 
     private void Update() {
         if (InteractRay.instance.IsLookingAt(speeder)) {
-            if (Input.GetKeyDown(KeyCode.F)) {
+            if (CInput.KeyDown(CInput.enter)) {
                 EndDocking();
                 player.transform.parent = null;
                 SwitchTo(ControlEntity.Ship);

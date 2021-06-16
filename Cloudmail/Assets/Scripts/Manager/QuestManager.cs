@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CustomInput;
 
 public class QuestManager : MonoBehaviour {
 
@@ -23,7 +24,7 @@ public class QuestManager : MonoBehaviour {
 
     private void Update() {
         if (InteractRay.instance.IsLookingAt(bell)) {
-            if (Input.GetKeyDown(KeyCode.Mouse0) && activeQuests < maxQuests) {
+            if (CInput.KeyDown(CInput.select) && activeQuests < maxQuests) {
                 SpawnQuest(packageSpawn.transform.position, GetShipSpawnSpot());
             }
         }

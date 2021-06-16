@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CustomInput;
 
 public class Speeder3D : MonoBehaviour
 {
@@ -61,10 +62,10 @@ public class Speeder3D : MonoBehaviour
 			float moveTowards = 0;
 			float changeRatePerSecond = 1 / accelerationSpeed * Time.deltaTime;
 
-			if (Input.GetKey(KeyCode.S)) {
+			if (CInput.HoldKey(CInput.backward)) {
 				moveTowards = -maxSpeedB;
 				accelerationSpeed = whenMovingAccSpd;
-			} else if (Input.GetKey(KeyCode.W)) {
+			} else if (CInput.HoldKey(CInput.forward)) {
 				moveTowards = maxSpeedF;
 				accelerationSpeed = whenMovingAccSpd;
 			} else {
@@ -75,11 +76,11 @@ public class Speeder3D : MonoBehaviour
 			moveSpeed = Mathf.MoveTowards(moveSpeed, moveTowards, changeRatePerSecond);
 
 			//Turbo
-			if (Input.GetKey(KeyCode.Space)) {
+			if (CInput.HoldKey(CInput.jump)) {
 				maxSpeedF = turboSpeed;
 				accelerationSpeed = turboAccSpd;
 			} 
-			if (Input.GetKeyUp(KeyCode.Space)){
+			if (CInput.KeyUp(CInput.jump)) {
 				maxSpeedF = normalMaxSpeedF;
 				accelerationSpeed = whenMovingAccSpd;
 			}
@@ -92,7 +93,7 @@ public class Speeder3D : MonoBehaviour
 			}
 
 			//Exiting on dock
-			if (Input.GetKeyDown(KeyCode.F) && inDockArea) {
+			if ((CInput.KeyDown(CInput.enter)) && inDockArea) {
 				ControlsManager.instance.SwitchTo(ControlsManager.ControlEntity.Player);
 				MovePlayer(ControlsManager.instance.currentDock.GetPlrSpawnPos());
 				Dock dock = ControlsManager.instance.currentDock.GetComponent<Dock>();

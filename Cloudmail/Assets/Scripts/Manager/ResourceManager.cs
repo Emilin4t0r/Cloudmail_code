@@ -17,12 +17,6 @@ public class ResourceManager : MonoBehaviour {
         r_amts = new int[r_types];
     }
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.G)) {
-            AddResourcesRand(ResourceType.Thing);
-        }
-    }
-
     public void AddResourcesRand(ResourceType mainType) {
 
         int[] oldAmts = new int[r_amts.Length];

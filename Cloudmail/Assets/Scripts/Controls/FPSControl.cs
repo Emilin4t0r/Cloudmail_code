@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CustomInput;
 
 public class FPSControl : MonoBehaviour {
 
@@ -41,7 +42,7 @@ public class FPSControl : MonoBehaviour {
         float xMove = Input.GetAxis("Horizontal") * walkSpeed / 100;
         float zMove = Input.GetAxis("Vertical") * walkSpeed / 100;
 
-        if (Input.GetKey(KeyCode.LeftShift)) { //sprinting
+        if (CInput.HoldKey(CInput.boost)) { //sprinting
             zMove *= runMultip;
         }
 
@@ -49,7 +50,7 @@ public class FPSControl : MonoBehaviour {
     }
 
     void Jumping() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (CInput.HoldKey(CInput.jump)) {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.down, out hit)) {
                 if (Vector3.Distance(hit.point, transform.position) < 1.2f) {

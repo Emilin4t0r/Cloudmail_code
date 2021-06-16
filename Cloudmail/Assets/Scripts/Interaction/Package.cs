@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CustomInput;
 
 public class Package : MonoBehaviour {
 
@@ -8,7 +9,7 @@ public class Package : MonoBehaviour {
 
     void Update() {
         if (InteractRay.instance.IsLookingAt(gameObject)) {
-            if (Input.GetKeyDown(KeyCode.E)) {
+            if (CInput.HoldKey(CInput.interact)) {
                 LoadOnSpeeder();
             }
         }
