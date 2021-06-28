@@ -15,6 +15,7 @@ public class Speeder3D : MonoBehaviour
 
 	public float accelerationSpeed;
 	public float turboAccSpd, whenMovingAccSpd, notMovingAccSpd;
+	public float turboDuration = 5;
 	float normalMaxSpeedF;
 
 	private int[] center = new int[2];
@@ -75,15 +76,10 @@ public class Speeder3D : MonoBehaviour
 			changeRatePerSecond *= 50;
 			moveSpeed = Mathf.MoveTowards(moveSpeed, moveTowards, changeRatePerSecond);
 
-			//Turbo
-			if (CInput.HoldKey(CInput.jump)) {
-				maxSpeedF = turboSpeed;
-				accelerationSpeed = turboAccSpd;
-			} 
-			if (CInput.KeyUp(CInput.jump)) {
-				maxSpeedF = normalMaxSpeedF;
-				accelerationSpeed = whenMovingAccSpd;
-			}
+			//Boost
+			if (CInput.KeyDown(CInput.boost)) {
+				StartCoroutine(Boost());
+            }
 
 			transform.Translate(0, 0, moveSpeed * Time.deltaTime);
 
@@ -100,6 +96,15 @@ public class Speeder3D : MonoBehaviour
 				Dock(dock.GetDockSpot(), dock.GetDockRot(), dock.GetPlrSpawnPos());
 			}
 		}
+	}
+
+	IEnumerator Boost() {
+		yield return new WaitForSeconds(0.35f);
+		maxSpeedF = turboSpeed;
+		accelerationSpeed = turboAccSpd;
+		yield return new WaitForSeconds(turboDuration);
+		maxSpeedF = normalMaxSpeedF;
+		accelerationSpeed = whenMovingAccSpd;
 	}
 
     private void FixedUpdate() {
@@ -151,6 +156,7 @@ public class Speeder3D : MonoBehaviour
 	void Dock(Vector3 dockPos, Quaternion dockRot, Vector3 plrSpawnPos) {
 		if (firstDock > 0) {
 			ControlsManager.instance.Dock(dockPos, dockRot, plrSpawnPos);
+			moveSpeed = 0;
 		} else {
 			firstDock++;
 		}

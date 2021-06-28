@@ -10,14 +10,18 @@ public class ControlsManager : MonoBehaviour {
     public GameObject player, speeder, plrCam, shipCam, compass;
     FPSControl plrCtrl;
     Speeder3D spdrCtrl;
+    public SpeederTilt sTilt;
 
     Vector3 dockingPoint;
     Quaternion dockingRot;
-    bool docking, isDocked;
+    public bool docking, isDocked;
     Vector3 playerSpawnPosition;
     public Dock currentDock;
+    float dockingTimer;
 
     public static ControlsManager instance;
+
+    public float dDist, dAngle;
 
     private void Start() {
         instance = this;
@@ -29,7 +33,7 @@ public class ControlsManager : MonoBehaviour {
     public void SwitchTo(ControlEntity entity) {
         if (entity == ControlEntity.Ship) {
             plrCtrl.enabled = false;
-            spdrCtrl.enabled = true;            
+            spdrCtrl.enabled = true;
             plrCam.SetActive(false);
             shipCam.SetActive(true);
             compass.SetActive(true);
@@ -66,22 +70,28 @@ public class ControlsManager : MonoBehaviour {
         if (docking) {
             spdrCtrl.canMove = false;
             dockingPoint = currentDock.GetDockSpot();
-            float dist = Vector3.Distance(speeder.transform.position, dockingPoint);
-            float angle = Quaternion.Angle(speeder.transform.rotation, dockingRot);
-            speeder.transform.position = Vector3.MoveTowards(speeder.transform.position, dockingPoint, dist / 10);
-            speeder.transform.rotation = Quaternion.RotateTowards(speeder.transform.rotation, dockingRot, angle / 15);
-            if (dist < 0.5f) {
+            dDist = Vector3.Distance(speeder.transform.position, dockingPoint);
+            dAngle = Quaternion.Angle(speeder.transform.rotation, dockingRot);
+            speeder.transform.position = Vector3.MoveTowards(speeder.transform.position, dockingPoint, dDist / 10);
+            speeder.transform.rotation = Quaternion.RotateTowards(speeder.transform.rotation, dockingRot, dAngle / 10);
+            if (dDist < 0.1f) {
                 EndDocking();
-            } else if (dist < 1f && controlEntity != ControlEntity.Player) {
+            } else if (dDist < 1f && controlEntity != ControlEntity.Player) {
                 spdrCtrl.MovePlayer(playerSpawnPosition);
                 player.transform.parent = currentDock.transform.parent.transform.parent; //set player parent as ShipRotator
                 SwitchTo(ControlEntity.Player);
             }
+            if (Time.time > dockingTimer) {
+                EndDocking();
+            }
         }
-        
+
         if (isDocked) {
             speeder.transform.position = currentDock.GetDockSpot();
             speeder.transform.rotation = currentDock.GetDockRot();
+            /*if (sTilt.tiltAmt != 0) {
+                sTilt.tiltAmt = 0;
+            }*/
         }
     }
 
@@ -91,6 +101,7 @@ public class ControlsManager : MonoBehaviour {
         spdrCtrl.rb.velocity = Vector3.zero;
         spdrCtrl.rb.angularVelocity = Vector3.zero;
         speeder.transform.rotation = dockingRot;
+        sTilt.tiltAmt = 0;
         isDocked = true;
     }
 
@@ -105,5 +116,6 @@ public class ControlsManager : MonoBehaviour {
         playerSpawnPosition = plrSpawnPos;
         spdrCtrl.rb.velocity = Vector3.zero;
         spdrCtrl.rb.angularVelocity = Vector3.zero;
+        dockingTimer = Time.time + 2f;
     }
 }

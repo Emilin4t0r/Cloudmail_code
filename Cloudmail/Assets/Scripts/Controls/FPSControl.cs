@@ -39,8 +39,24 @@ public class FPSControl : MonoBehaviour {
     }
 
     void Movement() {
-        float xMove = Input.GetAxis("Horizontal") * walkSpeed / 100;
-        float zMove = Input.GetAxis("Vertical") * walkSpeed / 100;
+        float xMove;
+        float zMove;       
+
+        if (CInput.HoldKey(CInput.forward)) {
+            zMove = 1 * walkSpeed / 100;
+        } else if (CInput.HoldKey(CInput.backward)) {
+            zMove = -1 * walkSpeed / 100;
+        } else {
+            zMove = 0;
+        }
+
+        if (CInput.HoldKey(CInput.right)) {
+            xMove = 1 * walkSpeed / 100;
+        } else if (CInput.HoldKey(CInput.left)) {
+            xMove = -1 * walkSpeed / 100;
+        } else {
+            xMove = 0;
+        }
 
         if (CInput.HoldKey(CInput.boost)) { //sprinting
             zMove *= runMultip;
