@@ -17,6 +17,14 @@ public class ResourceManager : MonoBehaviour {
         r_amts = new int[r_types];
     }
 
+    public int[] GetAmts() {
+        return r_amts;
+    }
+
+    public void SetAmts(int[] newAmts) {
+        r_amts = newAmts;
+    }
+
     public void AddResourcesRand(ResourceType mainType) {
 
         int[] oldAmts = new int[r_amts.Length];
