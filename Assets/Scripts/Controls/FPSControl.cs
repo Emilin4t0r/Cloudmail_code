@@ -24,8 +24,10 @@ public class FPSControl : MonoBehaviour {
 
     void Update() {
         LookRotations();
-        Movement();
         Jumping();
+    }
+    private void FixedUpdate() {
+        Movement();
     }
 
     void LookRotations() {
@@ -43,17 +45,17 @@ public class FPSControl : MonoBehaviour {
         float zMove;       
 
         if (CInput.HoldKey(CInput.forward)) {
-            zMove = 1 * walkSpeed / 100;
+            zMove = 1 * walkSpeed / 50;
         } else if (CInput.HoldKey(CInput.backward)) {
-            zMove = -1 * walkSpeed / 100;
+            zMove = -1 * walkSpeed / 50;
         } else {
             zMove = 0;
         }
 
         if (CInput.HoldKey(CInput.right)) {
-            xMove = 1 * walkSpeed / 100;
+            xMove = 1 * walkSpeed / 50;
         } else if (CInput.HoldKey(CInput.left)) {
-            xMove = -1 * walkSpeed / 100;
+            xMove = -1 * walkSpeed / 50;
         } else {
             xMove = 0;
         }
@@ -66,7 +68,7 @@ public class FPSControl : MonoBehaviour {
     }
 
     void Jumping() {
-        if (CInput.HoldKey(CInput.jump)) {
+        if (CInput.KeyDown(CInput.jump)) {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.down, out hit)) {
                 if (Vector3.Distance(hit.point, transform.position) < 1.2f) {

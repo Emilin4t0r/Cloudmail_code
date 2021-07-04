@@ -29,6 +29,8 @@ public class Speeder3D : MonoBehaviour
 	public GameObject player;
 	public bool canMove;
 	public bool inDockArea;
+	bool hasHitWall;
+	Vector3 bounceDir;
 	int regionLayer = 1 << 7;
 	GameObject currentRegion;
 
@@ -83,7 +85,7 @@ public class Speeder3D : MonoBehaviour
 
 			transform.Translate(0, 0, moveSpeed * Time.deltaTime);
 
-			if (rb.velocity.magnitude < .01) {
+			if (rb.velocity.magnitude < .01 && !hasHitWall) {
 				rb.velocity = Vector3.zero;
 				rb.angularVelocity = Vector3.zero;
 			}
@@ -145,14 +147,29 @@ public class Speeder3D : MonoBehaviour
 			Destroy(other.gameObject);
 		}
 	}
-
+	
 	private void OnTriggerExit(Collider other) {
 		if (other.transform.CompareTag("Dock")) {
 			inDockArea = false;
 		}
 	}
 
-	int firstDock = 0;
+    private void OnCollisionEnter(Collision collision) {
+		hasHitWall = true;
+		bounceDir = Vector3.Reflect(transform.forward, collision.contacts[0].normal);
+		rb.AddForce(bounceDir * moveSpeed * 5, ForceMode.Impulse);		
+		Debug.DrawRay(transform.position, bounceDir * 10, Color.blue, 1f);
+		StartCoroutine(InCollision());
+	}
+
+	IEnumerator InCollision() {
+		yield return new WaitForSeconds(0.02f);
+		transform.rotation = Quaternion.LookRotation(bounceDir);
+		yield return new WaitForSeconds(2f);
+		hasHitWall = false;
+    }
+
+    int firstDock = 0;
 	void Dock(Vector3 dockPos, Quaternion dockRot, Vector3 plrSpawnPos) {
 		if (firstDock > 0) {
 			ControlsManager.instance.Dock(dockPos, dockRot, plrSpawnPos);
