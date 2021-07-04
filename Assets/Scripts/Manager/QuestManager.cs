@@ -34,7 +34,7 @@ public class QuestManager : MonoBehaviour {
         GameObject sParent = Instantiate(ship, shipSpawn, Quaternion.identity);
         GameObject p = Instantiate(package, pkgSpawn, Quaternion.identity);
         GameObject s = sParent.transform.GetChild(0).gameObject;
-        s.GetComponent<MeshRenderer>().material = deliveryMats[nextMat];
+        s.transform.GetChild(0).GetComponent<MeshRenderer>().material = deliveryMats[nextMat];
         p.GetComponentInChildren<MeshRenderer>().material = deliveryMats[nextMat];
         //set package visually onto ship
         if (nextMat < maxQuests - 1) {
@@ -44,7 +44,6 @@ public class QuestManager : MonoBehaviour {
         }
         relations.Add(s, p);
         activeQuests++;
-        print(relations[s]);
     }
 
     public void LoadPackageOnSpdr(GameObject pkg) {
