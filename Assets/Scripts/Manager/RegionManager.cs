@@ -19,7 +19,7 @@ public class RegionManager : MonoBehaviour {
     Vector3 lastPos;
     float oobTimer;
 
-    void Start() {
+    void Awake() {
         instance = this;
         currentRegion = null;
 

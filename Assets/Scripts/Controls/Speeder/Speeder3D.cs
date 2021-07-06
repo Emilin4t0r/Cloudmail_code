@@ -144,6 +144,7 @@ public class Speeder3D : MonoBehaviour
 		//Hitting Container/Gathering Resources
 		if (other.transform.CompareTag("Container")) {
 			ResourceManager.instance.AddResourcesRand(RegionManager.instance.GetCurrentRegionResource());
+			ContainerManager.instance.RemoveFromActiveContainers(other.gameObject);
 			Destroy(other.gameObject);
 		}
 	}
@@ -157,7 +158,7 @@ public class Speeder3D : MonoBehaviour
     private void OnCollisionEnter(Collision collision) {
 		hasHitWall = true;
 		bounceDir = Vector3.Reflect(transform.forward, collision.contacts[0].normal);
-		rb.AddForce(bounceDir * moveSpeed * 5, ForceMode.Impulse);		
+		rb.AddForce(bounceDir * moveSpeed * 2, ForceMode.Impulse);		
 		Debug.DrawRay(transform.position, bounceDir * 10, Color.blue, 1f);
 		StartCoroutine(InCollision());
 	}

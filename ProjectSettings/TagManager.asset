@@ -8,6 +8,7 @@ TagManager:
   - Dock
   - Region
   - Container
+  - CSpawner
   layers:
   - Default
   - TransparentFX

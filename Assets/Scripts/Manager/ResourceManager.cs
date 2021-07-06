@@ -53,6 +53,6 @@ public class ResourceManager : MonoBehaviour {
                 msg += r_amts[i] - oldAmts[i] + " " + (ResourceType)i + ", ";
             }            
         }
-        print("Added " + msg);
+        //print("Added " + msg);
     }
 }
