@@ -13,7 +13,7 @@ public class Deliveree : MonoBehaviour {
 
     void Update() {
         if (InteractRay.instance.IsLookingAt(gameObject)) {
-            if (CInput.HoldKey(CInput.interact)) {
+            if (CInput.KeyDown(CInput.interact)) {
                 Deliver();
             }
         }
